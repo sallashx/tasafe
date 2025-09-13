@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>TáSafe – Gerar Carteirinha</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+        color: #333;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #ffffff;
+        padding: 12px 24px;
+        border-bottom: 2px solid #249483;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo img {
+        height: 42px;
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 24px;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #249483;
+        font-weight: 600;
+      }
+
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 16px 24px;
+      }
+
+      footer {
+        background-color: #f1f1f1;
+        text-align: center;
+        padding: 16px;
+        font-size: 0.9rem;
+        color: #666;
+        border-top: 1px solid #ddd;
+      }
+
+      h1,
+      h2 {
+        color: #249483;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">
+          <a
+            class="brand"
+            href="index.html"
+            aria-label="Ir para a página inicial TáSafe"
+          >
+            <img
+              src="assets/logotasafe.png"
+              alt="TáSafe"
+              width="90"
+              height="32"
+              decoding="async"
+            />
+          </a>
+        </div>
+        <button
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-controls="site-menu"
+          aria-label="Abrir menu de navegação"
+        >
+          ⋯
+        </button>
+        <nav id="site-menu" class="site-nav" aria-label="Navegação principal">
+          <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="gerar.html">Gerar carteirinha</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+  </body>
+</html>
+<!-- gerar.html -->
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <!-- Floating Labels -->
+    <style>
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      @media (max-width: 680px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .campo {
+        position: relative;
+      }
+
+      .campo input,
+      .campo select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+        background: #fff;
+        outline: none;
+      }
+
+      .campo input:focus,
+      .campo select:focus {
+        border-color: #249483;
+        box-shadow: 0 0 0 2px rgba(36, 148, 131, 0.12);
+      }
+
+      .campo label {
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        color: #666;
+        font-size: 14px;
+        pointer-events: none;
+        transition: 0.18s ease all;
+        background: #fff;
+        padding: 0 4px;
+      }
+
+      /* Sobe a label quando há foco ou valor */
+      .campo input:focus + label,
+      .campo input:not(:placeholder-shown) + label {
+        top: -8px;
+        left: 8px;
+        font-size: 12px;
+        color: #249483;
+      }
+
+      /* Para select usa: valid (com required e option value="") */
+      .campo select:focus + label,
+      .campo select:valid + label {
+        top: -8px;
+        left: 8px;
+        font-size: 12px;
+        color: #249483;
+      }
+
+      /* Para input type=file: manter a label sempre acima */
+      .campo-arquivo label {
+        top: -8px !important;
+        left: 8px !important;
+        font-size: 12px !important;
+        color: #249483 !important;
+      }
+    </style>
+
+    <main>
+      <div class="container layout-grid">
+        <!-- Coluna esquerda: FORMULÁRIO -->
+        <div class="col-form">
+          <h2>Preencha os dados para gerar sua carteirinha</h2>
+
+          <form id="form-carteirinha">
+            <div class="form-grid">
+              <!-- ================== DADOS DO PORTADOR ================== -->
+              <fieldset class="grupo-usuario">
+                <legend>Dados do portador da carteirinha</legend>
+
+                <div class="campo">
+                  <input type="text" id="nome" placeholder=" " required />
+                  <label for="nome">Nome completo</label>
+                </div>
+
+                <div class="campo">
+                  <input
+                    type="text"
+                    id="sus"
+                    placeholder=" "
+                    inputmode="numeric"
+                    autocomplete="off"
+                    required
+                  />
+                  <label for="sus">Número do SUS (15 dígitos)</label>
+                </div>
+
+                <div class="campo">
+                  <input
+                    type="date"
+                    id="nascimento"
+                    placeholder=" "
+                    max="9999-12-31"
+                    required
+                  />
+                  <label for="nascimento">Data de Nascimento</label>
+                </div>
+
+                <div class="campo">
+                  <select id="sangue" required>
+                    <option value="" selected>Selecione</option>
+                    <option value="NI">Não informar</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </select>
+                  <label for="sangue">Tipo sanguíneo</label>
+                </div>
+
+                <!-- Foto -->
+                <div class="campo campo-arquivo full-span">
+                  <label class="uploader-label">Foto do portador</label>
+
+                  <div
+                    class="foto-uploader"
+                    id="foto-uploader"
+                    aria-label="Uploader de foto"
+                  >
+                    <input
+                      type="file"
+                      id="foto"
+                      accept="image/png,image/jpeg,image/webp"
+                      hidden
+                    />
+
+                    <div
+                      class="foto-dropzone"
+                      id="foto-dropzone"
+                      tabindex="0"
+                      role="button"
+                      aria-label="Área para selecionar ou soltar a foto do portador"
+                    >
+                      <div class="foto-thumb" id="foto-thumb">FOTO</div>
+
+                      <div class="foto-cta">
+                        <button
+                          type="button"
+                          class="botao sm"
+                          id="btn-foto-escolher"
+                          aria-label="Selecionar foto do portador"
+                        >
+                          Selecionar foto
+                        </button>
+                        <button
+                          type="button"
+                          class="botao secundario sm"
+                          id="btn-foto-remover"
+                          disabled
+                          aria-label="Remover foto selecionada"
+                        >
+                          Remover
+                        </button>
+                      </div>
+
+                      <p class="foto-hint">
+                        PNG/JPG/WebP até 3 MB. Arraste e solte ou clique em
+                        “Selecionar foto”.
+                      </p>
+                      <div
+                        class="foto-msg"
+                        id="foto-msg"
+                        aria-live="polite"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <!-- ================== INFORMAÇÕES MÉDICAS ================== -->
+              <fieldset class="grupo-medicas">
+                <legend>Informações médicas</legend>
+
+                <!-- Alergias (chips) -->
+                <div class="campo full-span">
+                  <div class="chip-field grid">
+                    <div class="chip-input-wrap">
+                      <input
+                        type="text"
+                        id="alergias"
+                        placeholder=" "
+                        autocomplete="off"
+                      />
+                      <label for="alergias"
+                        >Alergias (Digite e tecle Enter ou aperte o +)</label
+                      >
+                    </div>
+                    <button
+                      type="button"
+                      class="chip-add"
+                      id="add-alergia"
+                      aria-label="Adicionar alergia"
+                    >
+                      +
+                    </button>
+                    <div
+                      class="chips"
+                      id="alergias-chips"
+                      role="list"
+                      aria-label="Lista de alergias adicionadas"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- Condições Médicas (chips) -->
+                <div class="campo full-span">
+                  <div class="chip-field grid">
+                    <div class="chip-input-wrap">
+                      <input
+                        type="text"
+                        id="condicoes"
+                        placeholder=" "
+                        autocomplete="off"
+                      />
+                      <label for="condicoes"
+                        >Condições Médicas (Digite e tecle Enter ou aperte o
+                        +)</label
+                      >
+                    </div>
+                    <button
+                      type="button"
+                      class="chip-add"
+                      id="add-condicao"
+                      aria-label="Adicionar condição"
+                    >
+                      +
+                    </button>
+                    <div
+                      class="chips"
+                      id="condicoes-chips"
+                      role="list"
+                      aria-label="Lista de condições médicas adicionadas"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- Medicamentos Contínuos (chips) -->
+                <div class="campo full-span">
+                  <div class="chip-field grid">
+                    <div class="chip-input-wrap">
+                      <input
+                        type="text"
+                        id="medicamentos"
+                        placeholder=" "
+                        autocomplete="off"
+                      />
+                      <label for="medicamentos"
+                        >Medicamentos de uso contínuo (Enter / +)</label
+                      >
+                    </div>
+                    <button
+                      type="button"
+                      class="chip-add"
+                      id="add-medicamento"
+                      aria-label="Adicionar medicamento"
+                    >
+                      +
+                    </button>
+                    <div
+                      class="chips"
+                      id="medicamentos-chips"
+                      role="list"
+                      aria-label="Lista de medicamentos adicionados"
+                    ></div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <!-- ====== BLOCO: CONTATO ====== -->
+              <div class="acoes-grid">
+                <!-- Contato de emergência -->
+                <fieldset class="grupo-contato">
+                  <legend>Contatos de emergência</legend>
+
+                  <div class="contato-grid">
+                    <!-- Coluna esquerda: editor -->
+                    <div class="contato-editor">
+                      <div class="campo">
+                        <input type="text" id="contatoNome" placeholder=" " />
+                        <label for="contatoNome">Nome do contato</label>
+                      </div>
+
+                      <div class="campo">
+                        <input
+                          type="tel"
+                          id="contatoFone"
+                          placeholder=" "
+                          inputmode="numeric"
+                          autocomplete="off"
+                        />
+                        <label for="contatoFone"
+                          >Telefone do contato (com DDD)</label
+                        >
+                      </div>
+
+                      <div class="acoes">
+                        <button
+                          type="button"
+                          class="botao"
+                          id="btn-add-contato"
+                        >
+                          Adicionar contato
+                        </button>
+                        <span
+                          class="contato-msg"
+                          id="contato-msg"
+                          aria-live="polite"
+                        ></span>
+                      </div>
+                    </div>
+
+                    <!-- Coluna direita: lista (até 3) -->
+                    <div
+                      class="contatos-lista"
+                      id="contatos-lista"
+                      aria-live="polite"
+                    ></div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Coluna direita: PREVIEW + EXPORTAR -->
+        <aside class="col-side">
+          <div class="side-sticky">
+            <fieldset class="grupo-preview">
+              <legend>Pré-visualização</legend>
+
+              <div id="preview" class="preview-wrap">
+                <div
+                  class="carteirinha-visual"
+                  id="carteirinha"
+                  role="region"
+                  aria-label="Pré-visualização da carteirinha de emergência"
+                >
+                  <div class="frente">
+                    <img
+                      src="assets/logotasafe.png"
+                      alt="Logo TáSafe"
+                      class="logo-img"
+                    />
+
+                    <!-- Título -->
+                    <p class="titulo">Carteirinha de Emergência</p>
+
+                    <div class="frente-conteudo">
+                      <div class="coluna-foto">
+                        <div id="foto-preview" class="foto-preview">FOTO</div>
+                      </div>
+
+                      <div class="dados-textuais">
+                        <p>
+                          <strong>Nome:</strong> <span id="nome-prev"></span>
+                        </p>
+                        <p>
+                          <strong>Nº SUS:</strong> <span id="sus-prev"></span>
+                        </p>
+                        <div class="linha-dupla">
+                          <p>
+                            <strong>Nascimento:</strong>
+                            <span id="nasc-prev"></span>
+                          </p>
+                          <p class="tipo-sangue">
+                            <strong>Tipo Sanguíneo:</strong>
+                            <span id="sangue-prev"></span>
+                          </p>
+                        </div>
+                        <p>
+                          <strong>Alergias:</strong>
+                          <span
+                            id="alergias-prev"
+                            class="campo-limitado"
+                          ></span>
+                        </p>
+                        <p>
+                          <strong>Condições Médicas:</strong>
+                          <span
+                            id="condicoes-prev"
+                            class="campo-limitado"
+                          ></span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="verso">
+                    <p id="meds-back-p">
+                      <strong>Medicamentos de uso contínuo:</strong>
+                      <span
+                        id="medicamentos-prev"
+                        class="campo-limitado"
+                      ></span>
+                    </p>
+                    <p>
+                      <strong>Contatos de Emergência:</strong>
+                      <span id="contato-prev"></span>
+                    </p>
+
+                    <div class="aviso">
+                      <em
+                        >Aviso: Este não é um documento oficial.<br />Todas as
+                        informações são de responsabilidade do usuário.</em
+                      >
+                    </div>
+                  </div>
+
+                  <div class="linha"></div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="grupo-exportar">
+              <legend>Exportar carteirinha</legend>
+
+              <div class="exportar-wrap">
+                <div class="dropdown-wrap">
+                  <button type="button" id="btn-exportar" class="botao expand">
+                    Exportar carteirinha
+                  </button>
+                  <div class="dropdown" id="menu-exportar" hidden>
+                    <button
+                      type="button"
+                      id="acao-pdf"
+                      aria-label="Baixar a carteirinha em PDF"
+                    >
+                      Baixar arquivo PDF
+                    </button>
+                    <button
+                      type="button"
+                      id="acao-png"
+                      aria-label="Baixar a carteirinha como imagem PNG"
+                    >
+                      Baixar imagem em PNG
+                    </button>
+                    <button
+                      type="button"
+                      id="acao-print"
+                      aria-label="Imprimir a carteirinha gerada"
+                    >
+                      Imprimir
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  id="btn-compartilhar"
+                  class="botao secundario"
+                >
+                  Compartilhar link
+                </button>
+
+                <p class="hint">
+                  Confira os dados na pré-visualização e use “Exportar
+                  carteirinha” para escolher PDF/PNG/Imprimir.
+                </p>
+              </div>
+            </fieldset>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      Projeto Extensionista – TáSafe<br />
+      Desenvolvido por Gabriel S. Bizaco
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+      // Inicializa jsPDF no modo clássico para funcionar com browsers
+      window.jsPDF = window.jspdf.jsPDF;
+    </script>
+    <script src="script.js"></script>
+    <script>
+      (function () {
+        const header = document.querySelector("header");
+        const btn = header?.querySelector(".nav-toggle");
+        const nav = header?.querySelector("#site-menu");
+
+        if (!header || !btn || !nav) return;
+
+        function openMenu() {
+          header.classList.add("is-open");
+          btn.setAttribute("aria-expanded", "true");
+        }
+        function closeMenu() {
+          header.classList.remove("is-open");
+          btn.setAttribute("aria-expanded", "false");
+        }
+
+        btn.addEventListener("click", () => {
+          header.classList.contains("is-open") ? closeMenu() : openMenu();
+        });
+
+        // Fecha ao clicar fora do header
+        document.addEventListener("click", (e) => {
+          if (!header.classList.contains("is-open")) return;
+          if (!e.target.closest("header")) closeMenu();
+        });
+
+        // Fecha com ESC
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeMenu();
+        });
+
+        // Fecha ao clicar em um link do menu
+        nav.addEventListener("click", (e) => {
+          if (e.target.closest("a")) closeMenu();
+        });
+      })();
+    </script>
+  </head>
+</html>

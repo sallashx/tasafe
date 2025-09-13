@@ -1,0 +1,2263 @@
+/* =========================================================
+   TáSafe
+   Paleta: verde #249483, vermelho #ff5757
+   Fontes: Inter (geral), Roboto Slab (título da carteirinha)
+   ========================================================= */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&display=swap");
+
+:root {
+  --ts-verde: #249483;
+  --ts-vermelho: #ff5757;
+  --ts-borda: #ddd;
+  --ts-raio: 6px;
+  --ts-font: "Inter", sans-serif;
+  --ts-font-title: "Roboto Slab", serif;
+}
+
+/* Base */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+}
+body {
+  font-family: var(--ts-font);
+  background: #f8f9fa;
+  color: #222;
+  padding: 20px;
+}
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ===================== Layout principal ===================== */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* mobile empilha */
+  gap: 24px;
+}
+@media (min-width: 1000px) {
+  .layout-grid {
+    grid-template-columns: minmax(560px, 1fr) 380px; /* form confortável + lateral fixa */
+    column-gap: 32px;
+    align-items: start;
+  }
+}
+.col-form,
+.col-side {
+  min-width: 0;
+}
+.side-sticky {
+  position: sticky;
+  top: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===================== Pré-visualização ===================== */
+#preview {
+  padding: 10px;
+  background: #f7f7f7;
+  border: 1px dashed #ccc;
+  display: flex;
+  justify-content: center;
+}
+.preview-wrap {
+  --base-width: 342px; /* 85,6 mm @ 4px/mm */
+  --avail: min(100%, 100vw - 32px);
+  --scale: min(1, calc(var(--avail) / var(--base-width)));
+  width: calc(var(--base-width) * var(--scale));
+}
+.preview-wrap .carteirinha-visual {
+  transform: scale(var(--scale));
+  transform-origin: top left;
+}
+
+/* Carteirinha vertical: 85,6 × 108 mm => 342 × 432 px @4px/mm */
+.carteirinha-visual {
+  width: 342px;
+  height: 432px;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-size: 11px;
+  z-index: 1;
+}
+.frente,
+.verso {
+  width: 100%;
+  height: 50%;
+  padding: 12px;
+  overflow: hidden;
+  position: relative;
+}
+.frente {
+  border-bottom: 1px dashed #ccc;
+} /* dobra horizontal */
+
+.linha {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed #999;
+  height: 0;
+}
+
+.logo-img {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 48px;
+  height: auto;
+  z-index: 2;
+}
+.titulo {
+  font-family: var(--ts-font-title);
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--ts-verde);
+}
+
+.frente-conteudo {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.coluna-foto {
+  align-self: start;
+}
+.foto-preview {
+  width: 66px;
+  height: 86px;
+  background: #f0f0f0 center/cover no-repeat;
+  border: 1px solid #999;
+  border-radius: 4px;
+  color: #666;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dados-textuais {
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+.dados-textuais p {
+  margin: 2px 0;
+  word-break: break-word;
+}
+
+/* Nascimento (1fr) | Tipo sanguíneo (auto) na mesma linha */
+.dados-textuais .linha-dupla {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 6px;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.dados-textuais .linha-dupla p {
+  margin: 0;
+  font-size: 9.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.dados-textuais .linha-dupla .tipo-sangue {
+  white-space: nowrap;
+}
+
+.verso {
+  font-size: 11px;
+}
+.verso p {
+  margin: 6px 0;
+}
+.aviso {
+  position: absolute;
+  bottom: 10px;
+  left: 5%;
+  width: 90%;
+  font-size: 8px;
+  color: #999;
+  text-align: center;
+}
+
+/* ===================== Botões ===================== */
+button,
+.botao {
+  background: var(--ts-verde);
+  color: #fff;
+  border: 1px solid var(--ts-verde);
+  padding: 8px 16px;
+  border-radius: var(--ts-raio);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+button:hover,
+.botao:hover {
+  background: #1d786d;
+  border-color: #1d786d;
+}
+.botao.expand {
+  width: 100%;
+}
+.botao.secundario {
+  background: #fff;
+  color: var(--ts-verde);
+  border: 1px solid var(--ts-verde);
+}
+
+/* ===================== Formulário (floating labels) ===================== */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* fieldsets um por linha */
+  gap: 20px;
+  margin: 0 0 12px 0;
+  align-items: start;
+}
+.form-grid > fieldset {
+  grid-column: 1/-1;
+  width: 100%;
+}
+
+fieldset {
+  border: 1px solid #ccc;
+  border-radius: var(--ts-raio);
+  padding: 12px;
+  background: #fff;
+}
+fieldset legend {
+  font-weight: 600;
+  color: var(--ts-verde);
+  padding: 0 6px;
+}
+
+.campo {
+  position: relative;
+  margin-bottom: 12px;
+  width: 100%;
+}
+.hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+.campo input,
+.campo select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: var(--ts-raio);
+  background: #fff;
+  font-size: 11px;
+  outline: none;
+}
+.campo input:focus,
+.campo select:focus {
+  border-color: var(--ts-verde);
+  box-shadow: 0 0 0 2px rgba(36, 148, 131, 0.12);
+}
+
+/* Floating label */
+.campo label {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  color: #666;
+  font-size: 13px;
+  pointer-events: none;
+  transition: 0.18s ease;
+  background: inherit;
+  padding: 0 2px;
+}
+.campo input:not([type="date"]):focus + label,
+.campo input:not([type="date"]):not(:placeholder-shown) + label,
+.campo select:focus + label,
+.campo select:valid + label {
+  top: -8px;
+  left: 8px;
+  font-size: 12px;
+  color: var(--ts-verde);
+}
+/* arquivo: label fixa acima */
+.campo-arquivo label {
+  top: -8px !important;
+  left: 8px !important;
+  font-size: 12px !important;
+  color: var(--ts-verde) !important;
+}
+
+/* Validação visual */
+.is-valid {
+  border-color: var(--ts-verde) !important;
+  box-shadow: 0 0 0 2px rgba(36, 148, 131, 0.12) !important;
+}
+.is-invalid {
+  border-color: var(--ts-vermelho) !important;
+  box-shadow: 0 0 0 2px rgba(255, 87, 87, 0.12) !important;
+}
+
+/* Date input */
+.campo input[type="date"] {
+  color: #333;
+  font-family: inherit;
+}
+.campo input[type="date"]::-webkit-datetime-edit-text,
+.campo input[type="date"]::-webkit-datetime-edit-day-field,
+.campo input[type="date"]::-webkit-datetime-edit-month-field,
+.campo input[type="date"]::-webkit-datetime-edit-year-field {
+  color: #333;
+}
+
+/* Fieldsets internos em 2 colunas (desktop) para os blocos grandes */
+@media (min-width: 900px) {
+  fieldset.grupo-usuario,
+  fieldset.grupo-medicas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    row-gap: 10px;
+  }
+  .full-span {
+    grid-column: 1/-1;
+  }
+  /* Contato compacto (uma coluna) */
+}
+
+/* ===================== Chips ===================== */
+/* Grid: input (1fr) + botão (+) encostados, mesma altura */
+.chip-field.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 0;
+  row-gap: 6px;
+  align-items: stretch;
+}
+.chip-input-wrap {
+  grid-column: 1/2;
+  position: relative;
+}
+.chip-input-wrap input {
+  min-height: 40px;
+  padding: 8px;
+  border: 1px solid var(--ts-borda);
+  border-right: 0;
+  border-top-left-radius: var(--ts-raio);
+  border-bottom-left-radius: var(--ts-raio);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background: #fff;
+  font-size: 11px;
+  outline: none;
+}
+.chip-input-wrap input:focus {
+  border-color: var(--ts-verde);
+  box-shadow: 0 0 0 2px rgba(36, 148, 131, 0.12);
+}
+.chip-input-wrap label {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  color: #666;
+  font-size: 11px;
+  pointer-events: none;
+  transition: 0.18s ease;
+  background: inherit;
+  padding: 0 2px;
+}
+.chip-input-wrap input:focus + label,
+.chip-input-wrap input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 8px;
+  font-size: 12px;
+  color: var(--ts-verde);
+}
+
+.chip-add {
+  grid-column: 2/3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--ts-borda);
+  border-left: 1px solid var(--ts-borda);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: var(--ts-raio);
+  border-bottom-right-radius: var(--ts-raio);
+  background: #fff;
+  color: #333;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+}
+.chip-add:hover {
+  background: #f1f1f1;
+}
+.chip-add:active {
+  background: #e9e9e9;
+}
+.chip-add:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(36, 148, 131, 0.12);
+}
+
+.chips {
+  grid-column: 1/-1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 999px;
+  background: #f3f5f6;
+  color: #333;
+  font-size: 12px;
+}
+.chip .chip-x {
+  border: 0;
+  background: transparent;
+  color: var(--ts-vermelho);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 50%;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.chip .chip-x:hover {
+  background: rgba(255, 87, 87, 0.1);
+  color: #cc3f3f;
+}
+
+/* Mensagem dos chips (uma linha, largura total) */
+.chip-msg {
+  grid-column: 1/-1;
+  width: 100%;
+  font-size: 12px;
+  line-height: 1.25;
+  margin-top: 2px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chip-msg.warn {
+  color: #b26a00;
+}
+.chip-msg.error {
+  color: #cc3f3f;
+}
+
+/* ===================== Exportar (fieldset lateral) ===================== */
+fieldset.grupo-exportar {
+  border: 1px solid #ccc;
+  border-radius: var(--ts-raio);
+  padding: 12px;
+  background: #fff;
+}
+fieldset.grupo-exportar legend {
+  font-weight: 600;
+  color: var(--ts-verde);
+  padding: 0 6px;
+}
+.exportar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Dropdown */
+.dropdown-wrap {
+  position: relative;
+}
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 240px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 4px;
+  z-index: 50;
+}
+.dropdown button {
+  width: 100%;
+  display: block;
+  text-align: left;
+  background: transparent;
+  color: #333;
+  border: 0;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.dropdown button:hover {
+  background: #f5f7f8;
+}
+
+/* ===================== Responsivo fino ===================== */
+@media (max-width: 480px) {
+  /* inputs mais contidos sem quebrar labels longas */
+  .campo input,
+  .campo select,
+  .chip-input-wrap input {
+    font-size: 10px;
+    padding: 7px;
+  }
+  .campo label,
+  .chip-input-wrap label {
+    font-size: 9px;
+    right: 8px;
+    max-width: calc(100% - 16px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .chip-add {
+    min-height: 36px;
+    padding: 0 10px;
+  }
+  .chip-msg {
+    font-size: 9px;
+  }
+}
+
+.chip-field.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 0 !important;
+  row-gap: 6px;
+  align-items: stretch;
+}
+
+.chip-input-wrap input {
+  min-height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 8px 0 0 8px; 
+}
+
+.chip-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 40px;
+  padding: 0 12px;
+
+  border: 1px solid #ddd;
+  border-radius: 8px; 
+  margin-left: -1px; 
+  background: #fff;
+  color: #333;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Foco coerente */
+.chip-input-wrap input:focus,
+.chip-add:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(36, 148, 131, 0.12);
+}
+
+fieldset.grupo-medicas .campo {
+  margin: 0 !important;
+}
+fieldset.grupo-medicas .campo.full-span {
+  margin: 0 !important;
+}
+
+/* Ajuste fino do espaçamento entre linhas do grid desse fieldset */
+@media (min-width: 900px) {
+  fieldset.grupo-medicas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    row-gap: 8px !important;
+  }
+}
+/* No mobile, sem grid duplo — mantenha um respiro pequeno e consistente */
+@media (max-width: 899.98px) {
+  fieldset.grupo-medicas {
+    display: block;
+  }
+  fieldset.grupo-medicas .campo + .campo {
+    margin-top: 8px !important;
+  }
+}
+
+/* Mensagem dos chips: ocupa a linha toda em 1 linha */
+.chip-field .chip-msg {
+  grid-column: 1 / -1;
+  width: 100%;
+  font-size: 12px;
+  line-height: 1.25;
+  margin-top: 2px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Compacto no mobile */
+@media (max-width: 480px) {
+  .chip-input-wrap input {
+    min-height: 36px;
+  }
+  .chip-add {
+    min-height: 36px;
+    padding: 0 10px;
+  }
+  .chip-field .chip-msg {
+    font-size: 11px;
+  }
+}
+
+.chip-add:hover {
+  background: #f5f7f8;
+}
+.chip-add:active {
+  background: #eef1f2;
+}
+
+/* ===== Ritmo vertical consistente nos fieldsets em grid ===== */
+:root {
+  --campo-gap: 12px;
+}
+
+/* Desktop: os dois blocos grandes usam APENAS row-gap */
+@media (min-width: 900px) {
+  fieldset.grupo-usuario,
+  fieldset.grupo-medicas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    row-gap: var(--campo-gap) !important;
+  }
+
+  /* Zera margens internas dos campos dentro desses fieldsets (evita “dobrar” espaço) */
+  fieldset.grupo-usuario .campo,
+  fieldset.grupo-medicas .campo {
+    margin: 0 !important;
+  }
+  /* Itens que ocupam a largura toda (chips) também sem margem extra */
+  fieldset.grupo-usuario .campo.full-span,
+  fieldset.grupo-medicas .campo.full-span {
+    margin: 0 !important;
+  }
+}
+
+/* Mobile: sem grid duplo → usa margin-top entre campos */
+@media (max-width: 899.98px) {
+  fieldset.grupo-usuario,
+  fieldset.grupo-medicas {
+    display: block; /* uma coluna */
+  }
+  /* aplica o mesmo ritmo vertical só com margin-top entre irmãos */
+  fieldset.grupo-usuario .campo + .campo,
+  fieldset.grupo-medicas .campo + .campo {
+    margin-top: var(--campo-gap) !important;
+  }
+  /* e garante que os full-span (chips) não somem margem adicional */
+  fieldset.grupo-usuario .campo.full-span,
+  fieldset.grupo-medicas .campo.full-span {
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (min-width: 900px) {
+  fieldset.grupo-medicas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    row-gap: 10px !important;
+  }
+  /* os campos dentro do grupo não adicionam margens próprias */
+  fieldset.grupo-medicas .campo,
+  fieldset.grupo-medicas .campo.full-span {
+    margin: 0 !important;
+  }
+}
+
+fieldset.grupo-medicas .chip-field.grid {
+  row-gap: 2px !important;
+}
+fieldset.grupo-medicas .chip-field .chips {
+  margin-top: 0 !important;
+  gap: 4px !important;
+}
+fieldset.grupo-medicas .chip-field .chip-msg {
+  margin-top: 0 !important;
+  font-size: 12px;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 899.98px) {
+  fieldset.grupo-medicas {
+    display: block;
+  }
+  fieldset.grupo-medicas .campo + .campo {
+    margin-top: 10px !important;
+  }
+  fieldset.grupo-medicas .chip-field.grid {
+    row-gap: 2px !important;
+  }
+  fieldset.grupo-medicas .chip-field .chips,
+  fieldset.grupo-medicas .chip-field .chip-msg {
+    margin-top: 0 !important;
+  }
+}
+
+/* === Pré-visualização como fieldset (cartão consistente) === */
+fieldset.grupo-preview {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+fieldset.grupo-preview legend {
+  font-weight: 600;
+  color: #249483;
+  padding: 0 6px;
+}
+
+/* Card do preview (substitui o tracejado global) */
+.grupo-preview #preview {
+  background: #fbfbfb;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Respiro entre o card e a dica */
+.grupo-preview .hint {
+  margin-top: 8px;
+}
+
+/* Mantém o sticky da coluna direita com os dois fieldsets empilhados */
+.col-side .side-sticky {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* mantém Exportar logo abaixo */
+}
+
+/* ===== Evita scroll horizontal global ===== */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Dentro do grid, filhos não podem forçar largura mínima */
+.layout-grid > * {
+  min-width: 0;
+}
+.col-form,
+.col-side,
+fieldset,
+#preview,
+.preview-wrap {
+  max-width: 100%;
+}
+
+/* iOS Safari: 100vw inclui barra/áreas seguras → use 100% */
+.preview-wrap {
+  --base-width: 342px;
+  --scale: min(1, calc(100% / var(--base-width))); /* fallback sem 100vw */
+  width: calc(var(--base-width) * var(--scale));
+}
+.preview-wrap .carteirinha-visual {
+  transform: scale(var(--scale));
+  transform-origin: top left;
+}
+
+/* Garante que o cartão não “cresça” além da coluna */
+.col-side .side-sticky {
+  width: 100%;
+}
+.grupo-preview #preview {
+  overflow: hidden;
+}
+
+/* Mídias nunca passam da coluna */
+img,
+svg,
+canvas,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Itens de grid não “esticam” por conteúdo longo */
+.campo,
+.chip-field.grid {
+  min-width: 0;
+}
+
+/* ===== Uploader de foto (drag & drop + preview) ===== */
+.uploader-label {
+  display: block;
+  margin: 0 0 6px;
+  font-weight: 600;
+  color: #249483;
+}
+
+.foto-uploader {
+  width: 100%;
+}
+.foto-dropzone {
+  border: 1.5px dashed #cfd4d8;
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  gap: 10px 12px;
+  align-items: center;
+}
+.foto-dropzone:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(36, 148, 131, 0.18);
+}
+.foto-dropzone.is-dragover {
+  background: #f3f9f7;
+  border-color: #249483;
+}
+
+.foto-thumb {
+  grid-row: 1 / span 2;
+  width: 80px;
+  height: 104px;
+  border: 1px solid #999;
+  border-radius: 6px;
+  background: #f0f0f0 center/cover no-repeat;
+  color: #666;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.foto-cta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.botao.sm {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+.foto-hint {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+.foto-msg {
+  font-size: 12px;
+  color: #666;
+  min-height: 1em;
+}
+.foto-msg.error {
+  color: #cc3f3f;
+}
+.foto-msg.success {
+  color: #249483;
+}
+
+/* Mobile: fica em coluna */
+@media (max-width: 520px) {
+  .foto-dropzone {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    justify-items: start;
+  }
+  .foto-thumb {
+    grid-row: auto;
+  }
+}
+
+.foto-dropzone {
+  grid-template-columns: auto 1fr;
+}
+.foto-thumb {
+  grid-column: 1;
+}
+.foto-cta,
+.foto-hint,
+.foto-msg {
+  grid-column: 2;
+}
+
+/* Mensagem com altura mínima para não "pular" o layout */
+.foto-msg {
+  min-height: 1.2em;
+}
+
+/* Em mobile, vira 1 coluna (nada “anda pra direita”) */
+@media (max-width: 520px) {
+  .foto-dropzone {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto; /* thumb, cta, hint, msg */
+  }
+  .foto-thumb,
+  .foto-cta,
+  .foto-hint,
+  .foto-msg {
+    grid-column: 1;
+  }
+}
+
+/* Contatos: 2 colunas no desktop; 1 no mobile */
+fieldset.grupo-contato {
+  max-width: none !important;
+}
+.contato-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  .contato-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* Linha de ações e mensagem */
+.contato-editor .acoes {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.contato-msg {
+  font-size: 12px;
+  color: #666;
+  min-height: 1.2em;
+}
+.contato-msg.warn {
+  color: #b26a00;
+}
+.contato-msg.error {
+  color: #cc3f3f;
+}
+.contato-msg.success {
+  color: #249483;
+}
+
+/* Lista de contatos (direita) */
+.contatos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.contato-card {
+  border: 1px solid #e5e7ea;
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.contato-card .info {
+  font-size: 14px;
+}
+.contato-card .acoes {
+  display: flex;
+  gap: 8px;
+}
+.contato-card .btn-remover {
+  background: #fff;
+  color: #ff5757;
+  border: 1px solid #ff5757;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+.contato-card .btn-remover:hover {
+  background: rgba(255, 87, 87, 0.08);
+}
+
+/* Ajustes visuais de validação no nome */
+#contatoNome.is-invalid {
+  border-color: #ff5757 !important;
+  box-shadow: 0 0 0 2px rgba(255, 87, 87, 0.12) !important;
+}
+#contatoNome.is-valid {
+  border-color: #249483 !important;
+  box-shadow: 0 0 0 2px rgba(36, 148, 131, 0.12) !important;
+}
+
+@media (min-width: 900px) {
+  .layout-grid .col-form fieldset.grupo-contato {
+    max-width: none !important;
+    width: 100% !important;
+  }
+  /* se ainda existir o wrapper antigo lado-a-lado, neutraliza */
+  .acoes-grid {
+    display: contents !important;
+  }
+  .acoes-grid > fieldset {
+    width: 100% !important;
+  }
+}
+
+/* ===== Fixo e definitivo: contato em largura total ===== */
+
+.acoes-grid {
+  display: contents !important;
+}
+
+/* Força o fieldset de contato a ocupar toda a trilha do grid do form */
+.form-grid > fieldset.grupo-contato {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Belt-and-suspenders para qualquer outro seletor que pegava o contato */
+.col-form fieldset.grupo-contato {
+  width: 100% !important;
+  max-width: none !important;
+  float: none !important;
+  flex: initial !important;
+}
+
+@media (min-width: 900px) {
+  fieldset.grupo-contato {
+    max-width: none !important;
+  }
+}
+
+/* ===== Contatos de emergência: ocupar 100% da coluna esquerda ===== */
+.form-grid .acoes-grid {
+  display: contents; /* filhos se comportam como se fossem filhos diretos do grid */
+}
+
+@supports not (display: contents) {
+  .form-grid .acoes-grid {
+    display: block;
+  }
+  .form-grid .acoes-grid > fieldset {
+    width: 100%;
+  }
+}
+
+.layout-grid .col-form .form-grid > .acoes-grid > fieldset.grupo-contato,
+.col-form fieldset.grupo-contato {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+  float: none !important;
+  flex: initial !important;
+}
+
+fieldset.grupo-contato,
+fieldset.grupo-contato * {
+  min-width: 0; /* evita elementos “empurrarem” o grid */
+}
+
+/* ===== Contatos: cards compactos, texto com reticências e ações fixas ===== */
+.contatos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contato-card {
+  display: grid;
+  grid-template-columns: 1fr auto; /* info ocupa o que der, ações ficam fixas */
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid #e5e7ea;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.contato-card .info {
+  min-width: 0; /* permite encolher para ellipsis */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.contato-card .info .nome {
+  font-weight: 600;
+}
+.contato-card .info .sep {
+  margin: 0 4px;
+  color: #888;
+}
+
+.contato-card .acoes {
+  display: flex;
+  gap: 8px;
+}
+.contato-card .btn-editar,
+.contato-card .btn-remover {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1px solid transparent;
+  background: #fff;
+}
+.contato-card .btn-editar {
+  color: #249483;
+  border-color: #249483;
+}
+.contato-card .btn-editar:hover {
+  background: #eaf6f3;
+}
+
+.contato-card .btn-remover {
+  color: #ff5757;
+  border-color: #ff5757;
+}
+.contato-card .btn-remover:hover {
+  background: rgba(255, 87, 87, 0.08);
+}
+
+/* ===== Bloco de ações do editor de contatos: botão fixo + mensagem em 1 linha ===== */
+.contato-editor .acoes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.contato-editor .acoes .botao,
+#btn-add-contato {
+  flex: 0 0 auto;
+}
+
+/* Mensagem: pega o restante, sem quebrar linha */
+.contato-msg {
+  flex: 1 1 auto; /* ocupa só o espaço que sobrar */
+  min-width: 0; /* permite encolher dentro do flex */
+  white-space: nowrap; /* 1 linha */
+  overflow: hidden; /* corta excesso */
+  text-overflow: ellipsis; /* … no fim */
+  line-height: 1.25;
+  min-height: 1.25em; /* altura estável mesmo quando vazia */
+}
+
+@media (max-width: 420px) {
+  .contato-editor .acoes {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .contato-msg {
+    width: 100%;
+  }
+}
+
+/* Editor de contatos: botão fixo (linha 1) + mensagem completa abaixo (linha 2) */
+.contato-editor .acoes {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  row-gap: 6px;
+  align-items: center;
+}
+#btn-add-contato {
+  grid-column: 1; /* linha 1, coluna 1 */
+  grid-row: 1;
+  justify-self: start;
+}
+.contato-msg {
+  grid-column: 1 / -1; /* ocupa a largura toda */
+  grid-row: 2; /* embaixo do botão */
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: normal; /* permite múltiplas linhas */
+  overflow: visible;
+  text-overflow: clip;
+}
+
+@media (max-width: 420px) {
+  .contato-msg {
+    line-height: 1.35;
+  }
+}
+
+/* Contato: nome corta, telefone sempre visível */
+.contato-card {
+  display: grid;
+  grid-template-columns: 1fr auto; /* info | ações */
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid #e5e7ea;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+/* Dentro da info, 2 colunas: nome (1fr, ellipsis) | fone (auto, nowrap) */
+.contato-card .info {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 6px;
+  min-width: 0; /* permite encolher */
+}
+.contato-card .info .nome {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.contato-card .info .fone {
+  white-space: nowrap;
+}
+.contato-card .info .sep {
+  display: none;
+} /* não precisamos do “–”, o gap já separa */
+
+/* Ações fixas à direita */
+.contato-card .acoes {
+  display: flex;
+  gap: 8px;
+}
+.contato-card .btn-editar,
+.contato-card .btn-remover {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1px solid transparent;
+  background: #fff;
+}
+.contato-card .btn-editar {
+  color: #249483;
+  border-color: #249483;
+}
+.contato-card .btn-editar:hover {
+  background: #eaf6f3;
+}
+.contato-card .btn-remover {
+  color: #ff5757;
+  border-color: #ff5757;
+}
+.contato-card .btn-remover:hover {
+  background: rgba(255, 87, 87, 0.08);
+}
+
+/* ===== MOBILE ONLY: reduzir fontes dos campos ===== */
+@media (max-width: 480px) {
+  /* ajuste centralizado por variáveis */
+  :root {
+    --m-field: 10px; /* texto digitado (inputs/select/chips) */
+    --m-label: 9px; /* label normal */
+    --m-label-shrink: 9px; /* label “flutuante” encolhida */
+  }
+
+  /* Campos preenchíveis */
+  .campo input,
+  .campo select,
+  .campo textarea,
+  .chip-input-wrap input,
+  #contatoNome,
+  #contatoFone {
+    font-size: var(--m-field) !important;
+    line-height: 1.25;
+  }
+
+  /* Rótulos */
+  .campo label,
+  .chip-input-wrap label {
+    font-size: var(--m-label) !important;
+  }
+
+  /* Rótulos flutuantes (estado encolhido) */
+  .campo input:not([type="date"]):focus + label,
+  .campo input:not([type="date"]):not(:placeholder-shown) + label,
+  .campo select:focus + label,
+  .campo select:valid + label,
+  .chip-input-wrap input:focus + label,
+  .chip-input-wrap input:not(:placeholder-shown) + label {
+    font-size: var(--m-label-shrink) !important;
+  }
+
+  /*manter proporção dos campos de chips */
+  .chip-input-wrap input,
+  .chip-add {
+    min-height: 34px;
+  }
+}
+
+.carteirinha-visual,
+.carteirinha-visual .frente,
+.carteirinha-visual .verso {
+  background: #ff57570f; /* evita qualquer transparência que acabe “cinza” na rasterização */
+}
+
+/* Dropdown de sugestões dos chips */
+.chip-input-wrap {
+  position: relative;
+} /* garante posicionamento */
+
+.chip-suggest {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  max-height: 220px;
+  overflow: auto;
+  z-index: 30;
+}
+
+.chip-suggest .sug-item {
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: inherit;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip-suggest .sug-item:hover,
+.chip-suggest .sug-item.is-active {
+  background: #f3fbf9;
+  color: #249483; /* verde oficial */
+}
+
+/* Mensagem discreta para campos isolados */
+.field-msg {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.field-msg.warn {
+  color: #b26b00;
+} /* tom amarelado */
+.field-msg.error {
+  color: #ff5757;
+} /* vermelho oficial */
+.field-msg.success {
+  color: #249483;
+} /* verde oficial */
+
+/* 1) Hints/avisos: tamanho e cor consistentes */
+.hint,
+.field-msg,
+.chip-msg,
+.contato-msg {
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+  color: #666 !important;
+  font-weight: 400 !important;
+  opacity: 0.98;
+}
+
+/* 2) Fieldset "Contatos de emergência": largura total e sem ser "cortado" */
+.form-grid > fieldset.grupo-contato {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* impede que alguma regra antiga force meia largura por min-width */
+fieldset.grupo-contato,
+fieldset.grupo-contato * {
+  min-width: 0 !important;
+}
+
+/* mantém o editor e a lista em uma coluna também no desktop */
+.contato-grid {
+  grid-template-columns: 1fr !important;
+}
+
+/* cartões não espremem conteúdo */
+.contato-card .info {
+  min-width: 0 !important;
+}
+
+/* 3) Nome na carteirinha: remove o "serrilhado"/corte de linha
+      (deixa o JS cuidar do ajuste fino de tamanho) */
+#nome-prev {
+  overflow: visible !important;
+  max-height: none !important;
+  line-height: 1.28 !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Bolinha acoplada ao item: nunca fica sozinha na linha */
+#alergias-prev .chip-li,
+#condicoes-prev .chip-li,
+#medicamentos-prev .chip-li {
+  display: inline;
+  white-space: nowrap; /* item é atômico (• + texto) */
+}
+
+/* HOTFIX: Medicamentos não quebrando linha */
+#medicamentos-prev {
+  display: block;
+  white-space: normal !important; /* libera quebras */
+  word-break: normal !important;
+  overflow-wrap: anywhere !important; /* permite quebrar entre palavras longas */
+}
+
+/* cada item é atômico, mas pode pular para a próxima linha */
+#medicamentos-prev .chip-li {
+  display: inline-block; /* garante ponto de quebra entre itens */
+  white-space: nowrap; /* bolinha + texto juntos */
+}
+
+/* LISTAS na frente: conteúdo deve ficar na MESMA linha do rótulo quando couber */
+#alergias-prev,
+#condicoes-prev {
+  display: inline !important; /* garante inline com o rótulo */
+  white-space: normal !important; /* pode quebrar normalmente */
+}
+
+/* Itens com bolinha “acoplada” ao texto (mas o 1º pode quebrar para preencher espaço) */
+#alergias-prev .chip-li,
+#condicoes-prev .chip-li {
+  display: inline;
+  white-space: nowrap; /* cada item é atômico */
+}
+#alergias-prev .chip-li:first-child,
+#condicoes-prev .chip-li:first-child {
+  white-space: normal !important; /* o 1º pode aproveitar o espaço da 1ª linha */
+  overflow-wrap: anywhere; /* quebra entre palavras longas se precisar */
+}
+
+/* MEDICAMENTOS: container em bloco, mas com quebra normal entre itens */
+#medicamentos-prev {
+  display: block;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: anywhere !important;
+}
+#medicamentos-prev .chip-li {
+  display: inline;
+  white-space: nowrap; /* cada item é atômico */
+}
+#medicamentos-prev .chip-li:first-child {
+  white-space: normal !important; /* o 1º pode usar o espaço da 1ª linha */
+  overflow-wrap: anywhere;
+}
+
+/* Bolinha em TODOS os itens, colada ao texto (NBSP) */
+#alergias-prev .chip-li::before,
+#condicoes-prev .chip-li::before,
+#medicamentos-prev .chip-li::before {
+  content: "•\00A0"; /* bolinha + espaço não-quebrável */
+  white-space: nowrap;
+}
+
+/* Cada item é atômico (evita bolinha sozinha) */
+#alergias-prev .chip-li,
+#condicoes-prev .chip-li,
+#medicamentos-prev .chip-li {
+  display: inline;
+  white-space: nowrap;
+}
+
+/* Listas da frente: um pouco mais compactas */
+#alergias-prev,
+#condicoes-prev {
+  line-height: 1.25;
+  font-size: 10.25px;
+}
+
+/* Medicamentos no verso: 1.28 é bom para blocos grandes */
+#medicamentos-prev {
+  line-height: 1.28;
+}
+
+.frente {
+  border-bottom: 1px dashed #d0d0d0;
+}
+.linha {
+  border-top: 1px dashed #d0d0d0;
+}
+
+/* Listas: nenhum item quebra por dentro (nem o 1º) */
+#alergias-prev .chip-li,
+#condicoes-prev .chip-li,
+#medicamentos-prev .chip-li {
+  white-space: nowrap !important; /* item é atômico */
+  hyphens: none !important; /* não hifenizar */
+}
+
+/* garante que o 1º também NÃO quebre (sobrepõe patches antigos) */
+#alergias-prev .chip-li:first-child,
+#condicoes-prev .chip-li:first-child,
+#medicamentos-prev .chip-li:first-child {
+  white-space: nowrap !important;
+}
+
+/* Bolinha colada ao item + pequeno gap antes da bolinha */
+#alergias-prev .chip-li::before,
+#condicoes-prev .chip-li::before,
+#medicamentos-prev .chip-li::before {
+  content: "•\00A0"; /* • + NBSP colados ao item */
+  white-space: nowrap;
+}
+
+/* gap visual antes de cada item (exceto o 1º) */
+#alergias-prev .chip-li + .chip-li,
+#condicoes-prev .chip-li + .chip-li,
+#medicamentos-prev .chip-li + .chip-li {
+  margin-left: 0.35ch; /* ~ meio espaço de caractere */
+}
+
+/* containers: podem quebrar ENTRE itens normalmente */
+#alergias-prev,
+#condicoes-prev {
+  display: inline;
+  white-space: normal;
+}
+#medicamentos-prev {
+  display: block;
+  white-space: normal;
+  line-height: 1.28;
+  overflow-wrap: anywhere;
+}
+
+/* ——— Itens com bolinha colada e sem hifenização interna ——— */
+#alergias-prev .chip-li,
+#condicoes-prev .chip-li,
+#medicamentos-front .chip-li,
+.verso-continua .chip-li {
+  display: inline;
+  white-space: nowrap;
+  hyphens: none;
+}
+#alergias-prev .chip-li::before,
+#condicoes-prev .chip-li::before,
+#medicamentos-front .chip-li::before,
+.verso-continua .chip-li::before {
+  content: "•\00A0"; /* • + NBSP */
+  white-space: nowrap;
+}
+
+/* containers: podem quebrar ENTRE itens normalmente */
+#alergias-prev,
+#condicoes-prev {
+  display: inline;
+  white-space: normal;
+}
+#medicamentos-front {
+  display: block;
+  white-space: normal;
+  line-height: 1.28;
+  overflow-wrap: anywhere;
+}
+
+/* blocos de continuação no verso (vêm antes dos Contatos) */
+.verso-continua {
+  margin: 6px 0 0;
+  font-size: 10px;
+  line-height: 1.28;
+}
+
+/* aviso de “parede” (quando o verso não comporta tudo) */
+.overflow-wall {
+  position: absolute;
+  right: 8px;
+  bottom: 28px; /* acima do aviso legal */
+  background: #fff7d6;
+  color: #5b4a07;
+  border: 1px solid #ffe8a3;
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+@media print {
+  .overflow-wall {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    font-style: italic;
+  }
+}
+
+/* === Preview unificado: px na tela, mm na impressão === */
+
+/* TELA: 85,6 × 108 mm ≈ 324 × 408 px */
+@media screen {
+  #carteirinha {
+    width: 324px;
+    height: 408px;
+    transform: none !important;
+    zoom: 1 !important;
+  }
+  /* evita qualquer corte visual do contêiner da prévia */
+  .carteirinha-visual {
+    overflow: visible;
+  }
+}
+
+/* IMPRESSÃO / EXPORTAÇÃO: mantém o tamanho físico correto */
+@media print {
+  #carteirinha {
+    width: 85.6mm;
+    height: 108mm;
+    transform: none !important;
+  }
+}
+
+@media (min-width: 1000px) {
+  .col-side {
+    min-width: 360px;
+  }
+}
+
+/* Verso: continuação sem "(cont.)" e sem repetir rótulos */
+.verso-flow {
+  margin: 6px 0 0;
+  font-size: 10px;
+  line-height: 1.28;
+}
+.verso-flow .chip-li {
+  display: inline;
+  white-space: nowrap;
+  hyphens: none;
+}
+
+/* Continuação no verso sem rótulos */
+.verso-flow {
+  margin: 6px 0 0;
+  font-size: 10px;
+  line-height: 1.28;
+}
+.verso-flow .chip-li {
+  display: inline;
+  white-space: nowrap;
+}
+
+/* Esconde o parágrafo inteiro quando a lista estiver vazia (frente e verso) */
+#meds-back-p:has(#medicamentos-prev:empty) {
+  display: none;
+}
+
+/* Espaçamento entre chips no verso (lista rotulada e continuação) */
+#medicamentos-prev .chip-li,
+.verso-flow .chip-li {
+  display: inline;
+  white-space: nowrap;
+  margin-right: 6px; /* separa os itens */
+}
+
+/* Frente e verso ocupam metade do cartão (com preview 324×408 px) */
+@media screen {
+  .carteirinha-visual .frente,
+  .carteirinha-visual .verso {
+    height: 50%; /* 204px em 408px */
+    overflow: hidden; /* impede crescer; JS move o excedente pro verso */
+  }
+}
+
+/* Espaçamento visual dos itens no verso (lista rotulada e "fluxo") */
+#medicamentos-prev .chip-li,
+.verso-flow .chip-li {
+  display: inline;
+  white-space: nowrap;
+  margin-right: 6px; /* separa os itens */
+}
+
+#meds-front-p:has(#medicamentos-front:empty) {
+  display: block;
+}
+
+/* Frente e verso ocupam metade do cartão no preview (324×408 px) */
+@media screen {
+  .carteirinha-visual .frente,
+  .carteirinha-visual .verso {
+    height: 50%; /* 204px em 408px */
+    overflow: hidden; /* impede crescer; JS cuida do transbordo */
+  }
+}
+
+/* Espaçamento/legibilidade dos itens no verso (lista rotulada e continuidades) */
+#medicamentos-prev .chip-li,
+.verso-flow .chip-li {
+  display: inline;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
+/* Verso: parágrafos de continuação (sem rótulo) */
+.verso-flow {
+  margin: 6px 0 0;
+  font-size: 10px;
+  line-height: 1.28;
+}
+
+#meds-front-p:has(#medicamentos-front:empty) {
+  display: block;
+}
+
+/* Frente e verso ocupam metade do cartão no preview (324×408 px) */
+@media screen {
+  .carteirinha-visual .frente,
+  .carteirinha-visual .verso {
+    height: 50%; /* 204px em 408px */
+    overflow: hidden; /* impede crescer; JS cuida do transbordo */
+  }
+}
+
+/* Bullets inline (frente e verso) */
+.chip-li {
+  display: inline;
+  white-space: nowrap;
+}
+.chip-li + .chip-li::before {
+  content: " • ";
+}
+
+/* Blocos de continuação no verso (sem parágrafos por item) */
+.verso-flow {
+  margin: 6px 0 0;
+  font-size: 10px;
+  line-height: 1.28;
+}
+
+/* Verso — medicamentos: usa a mesma separação */
+#medicamentos-prev .chip-li {
+  display: inline;
+  white-space: nowrap;
+}
+#medicamentos-prev .chip-li + .chip-li::before {
+  content: " • ";
+}
+
+/* Frente e verso ocupam metade do cartão no preview (324×408 px) */
+@media screen {
+  .carteirinha-visual .frente,
+  .carteirinha-visual .verso {
+    height: 50%;
+    overflow: hidden; /* JS cuida do transbordo */
+  }
+}
+
+/* Bullets inline (para qualquer .chip-li) */
+.chip-li {
+  display: inline;
+  white-space: nowrap;
+}
+.chip-li + .chip-li::before {
+  content: " • ";
+}
+
+/* Bloco único de continuação no verso (sem criar <p> por item) */
+.verso-flow {
+  margin: 6px 0 0;
+  font-size: 10px;
+  line-height: 1.28;
+}
+
+/* Lista rotulada de Medicamentos no verso usa o mesmo padrão de bullets */
+#medicamentos-prev .chip-li {
+  display: inline;
+  white-space: nowrap;
+}
+#medicamentos-prev .chip-li + .chip-li::before {
+  content: " • ";
+}
+
+/* Bullets inline, com ponto de quebra visível entre chips */
+.chip-li {
+  display: inline;
+  /* remova white-space: nowrap daqui! deixe o navegador quebrar entre chips */
+}
+
+/* bolinha aparece só a partir do 2º item */
+.chip-li + .chip-li::before {
+  content: " • ";
+}
+
+/* Ponto de quebra explícito entre chips (zero-width space) */
+.chip-li::after {
+  content: "\200B";
+}
+
+#medicamentos-prev .chip-li {
+  display: inline;
+}
+#medicamentos-prev .chip-li + .chip-li::before {
+  content: " • ";
+}
+#medicamentos-prev .chip-li::after {
+  content: "\200B";
+}
+
+.verso-flow .chips-host {
+  display: inline;
+}
+
+/* Permite que os contêineres de listas no verso quebrem a linha */
+.verso-continua,
+#medicamentos-prev {
+  white-space: normal !important; /* Permite a quebra de linha entre os itens */
+  word-break: break-word; /* Ajuda a quebrar palavras longas se necessário */
+}
+
+/* Garante que cada item (bullet + texto) seja tratado como um bloco único,
+   impedindo que a linha quebre entre o bullet e o texto. */
+.verso-continua .chip-li,
+#medicamentos-prev .chip-li {
+  display: inline-block; /* Trata cada item como uma "palavra" */
+  white-space: nowrap; /* Mantém o texto do item em uma só linha */
+  vertical-align: bottom;
+}
+
+/* =========================================================
+   CORREÇÃO FINAL: Quebra de linha para listas no verso
+   ========================================================= */
+
+/* Força os contêineres no verso a permitir quebra de linha. */
+.verso #medicamentos-prev,
+.verso .verso-continua {
+  white-space: normal !important;
+  word-break: break-word;
+  display: inline; /* Garante que flua com o rótulo, se aplicável */
+}
+
+.verso .chip-li {
+  white-space: normal !important; /* Permite a quebra de linha */
+  display: inline-block; /* Trata o item como um bloco para quebra */
+}
+
+/* 3. Garante que o bullet (•) que separa os itens continue a funcionar bem. */
+.verso .chip-li + .chip-li::before {
+  content: "• ";
+  white-space: pre;
+}
+
+/* Piso fixo do verso para cálculo do limite (invisível) */
+.floor-sentinel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 28px; /* reserva aviso + parede */
+  height: 1px;
+  pointer-events: none;
+}
+
+.overflow-wall {
+  position: absolute;
+  left: 5%;
+  width: 90%;
+  bottom: 34px; /* acima do aviso legal */
+  background: #fff7d6;
+  color: #5b4a07;
+  border: 1px solid #ffe8a3;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 10px;
+  line-height: 1.3;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+@media print {
+  .overflow-wall {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    font-style: italic;
+  }
+}
+
+.verso.modo-dobra {
+  transform: rotate(180deg);
+  direction: rtl;
+}
+
+.verso.modo-dobra * {
+  direction: ltr;
+}
+
+.grupo-preview {
+  margin-top: 0 !important;
+}
+
+.side-sticky {
+  top: 0;
+  padding-top: 6px;
+}
+
+.side-sticky {
+  position: sticky;
+  top: 0;
+  padding-top: 4.2rem; /* Alinha com o h2 da col-form */
+}
+
+header {
+  background-color: #ffffff;
+  border-bottom: 2px solid #249483;
+  padding: 12px 24px;
+}
+
+header {
+  background-color: #ffffff;
+  border-bottom: 2px solid #249483;
+}
+
+.header-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+.frente::after,
+.verso::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("assets/iconetasafe.png");
+  background-repeat: repeat;
+  background-size: 25px;
+  background-position: center;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.frente,
+.verso {
+  position: relative;
+  background-color: #e6f4f2;
+  overflow: hidden;
+}
+
+/* ===== Hero TáSafe ===== */
+.hero-tasafe {
+  --ts-green: #249483;
+  --ts-red: #ff5757;
+  --bg-soft: #e6f4f2;
+  --text: #0f172a;
+  --radius: 18px;
+
+  padding: clamp(24px, 4vw, 48px);
+}
+
+.hero-tasafe .hero-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(20px, 4vw, 40px);
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+  .hero-tasafe .hero-wrap {
+    grid-template-columns: 1.1fr 0.9fr; /* imagem | texto */
+  }
+}
+
+.hero-tasafe .hero-media {
+  display: grid;
+  place-items: center;
+  padding: clamp(8px, 2vw, 12px);
+}
+
+.hero-tasafe .hero-media img {
+  max-width: min(520px, 90%);
+  height: auto;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.18));
+  animation: floaty 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-tasafe .hero-media img {
+    animation: none;
+  }
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.hero-tasafe .hero-copy {
+  color: var(--text);
+}
+
+.hero-tasafe h1 {
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+  font-size: clamp(32px, 5vw, 52px);
+  color: var(--ts-green);
+}
+
+.hero-tasafe .subtitle {
+  margin: 0 0 20px;
+  font-size: clamp(16px, 2.2vw, 18px);
+  color: #334155;
+}
+
+.hero-tasafe .cta-btn {
+  display: inline-block;
+  background: var(--ts-green);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  padding: 16px 22px;
+  border-radius: var(--radius);
+  box-shadow:
+    0 8px 20px rgba(36, 148, 131, 0.28),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+  font-size: clamp(16px, 2.4vw, 18px);
+  outline: none;
+  position: relative;
+}
+
+.hero-tasafe .cta-btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 28px rgba(36, 148, 131, 0.34),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.14);
+  filter: saturate(1.05);
+}
+
+.hero-tasafe .cta-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 8px 16px rgba(36, 148, 131, 0.28),
+    inset 0 2px 0 rgba(0, 0, 0, 0.08);
+}
+
+.hero-tasafe .cta-btn:focus-visible {
+  outline: 3px solid transparent;
+  box-shadow:
+    0 8px 20px rgba(36, 148, 131, 0.28),
+    0 0 0 4px rgba(255, 87, 87, 0.6); /* halo vermelho para contraste */
+}
+
+.hero-tasafe .small-note {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* Versão alternativa do botão (bordas) */
+.btn-outline {
+  background: #fff;
+  color: var(--ts-green);
+  border: 2px solid var(--ts-green);
+}
+.btn-outline:hover {
+  background: var(--bg-soft);
+}
+
+/* Reset mínimo pro menu */
+header nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ===== Header mobile fix (logo acima + menu em botões) ===== */
+@media (max-width: 640px) {
+  header .container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px; /* espaço entre logo e menu */
+    align-items: center;
+  }
+
+  /* Logo ocupa a linha inteira, centralizada e com tamanho saudável */
+  header .brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 0;
+  }
+  header .brand img {
+    height: 36px; /* ajuste fino da altura da logo */
+    width: auto;
+    max-width: 70vw; /* evita “espremida” */
+  }
+
+  /* Barra de navegação vira 3 botões iguais embaixo */
+  header nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Início | Gerar | Sobre */
+    gap: 8px;
+  }
+
+  header nav li {
+    margin: 0;
+  }
+
+  header nav a {
+    display: block;
+    text-align: center;
+    padding: 12px 10px;
+    border-radius: 12px;
+    text-decoration: none;
+
+    /* background: #e6f4f2;  */
+    /* color: #0f172a;       */
+  }
+
+  header nav a[href*="formulario"] {
+    font-weight: 800;
+    /* background: #249483; color: #fff; */
+  }
+}
+
+/* Desktop: nav visível, botão escondido */
+.nav-toggle {
+  display: none;
+}
+.site-nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 16px;
+}
+
+/* Mobile: “…” abre menu vertical */
+@media (max-width: 640px) {
+  header {
+    position: relative;
+  } /* âncora pro menu absoluto */
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 36px;
+    border: none;
+    border-radius: 10px;
+    background: #1d7a6e9a;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .site-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 6px); /* abre logo abaixo do header */
+    display: none; /* fechado por padrão */
+    background: #fff;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 8px 12px;
+    z-index: 30;
+  }
+  header.is-open .site-nav {
+    display: block;
+  } /* <-- abre! */
+
+  .site-nav ul {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .site-nav a {
+    display: block;
+    text-align: center;
+    padding: 12px 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    background: #f7fbfa;
+    font-weight: 600;
+  }
+}

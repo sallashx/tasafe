@@ -1,0 +1,40 @@
+{
+  "name": "tasafe",
+  "version": "0.1.0",
+  "description": "Projeto TáSafe - carteirinha de emergência",
+  "main": "script.js",
+  "scripts": {
+    "format": "prettier -w \"**/*.{js,css,html,md,json}\"",
+    "format:check": "prettier -c \"**/*.{js,css,html,md,json}\"",
+    "lint:js": "eslint \"**/*.js\" --max-warnings=0",
+    "lint:css": "stylelint \"**/*.css\"",
+    "lint": "npm run lint:js && npm run lint:css",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sallashx/tasafe.git"
+  },
+  "keywords": [
+    "health",
+    "card",
+    "html",
+    "css",
+    "javascript",
+    "tasafe"
+  ],
+  "author": "Gabriel S. Bizaco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sallashx/tasafe/issues"
+  },
+  "homepage": "https://github.com/sallashx/tasafe#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.2",
+    "prettier": "^3.0.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard": "^36.0.0"
+  }
+}

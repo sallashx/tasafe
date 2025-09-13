@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TáSafe – Sobre o Projeto</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+        color: #333;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #ffffff;
+        padding: 12px 24px;
+        border-bottom: 2px solid #249483;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo img {
+        height: 42px;
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 24px;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #249483;
+        font-weight: 600;
+      }
+
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 24px;
+      }
+
+      footer {
+        background-color: #f1f1f1;
+        text-align: center;
+        padding: 16px;
+        font-size: 0.9rem;
+        color: #666;
+        border-top: 1px solid #ddd;
+      }
+
+      h1,
+      h2 {
+        color: #249483;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">
+          <a
+            class="brand"
+            href="index.html"
+            aria-label="Ir para a página inicial TáSafe"
+          >
+            <img
+              src="assets/logotasafe.png"
+              alt="TáSafe"
+              width="90"
+              height="32"
+              decoding="async"
+            />
+          </a>
+        </div>
+        <button
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-controls="site-menu"
+          aria-label="Abrir menu de navegação"
+        >
+          ⋯
+        </button>
+        <nav id="site-menu" class="site-nav" aria-label="Navegação principal">
+          <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="gerar.html">Gerar carteirinha</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <h2>Sobre o Projeto TáSafe</h2>
+        <p>
+          O <strong>TáSafe</strong> é um projeto de extensão com foco em
+          inclusão digital, saúde e bem-estar. A proposta é permitir que
+          qualquer pessoa possa gerar uma
+          <strong>carteirinha de emergência</strong> com informações médicas e
+          de contato essenciais para situações críticas.
+        </p>
+        <p>
+          O projeto visa especialmente pessoas em situação de vulnerabilidade,
+          como idosos, pessoas com deficiência, crianças e cidadãos com doenças
+          crônicas.
+        </p>
+        <p>A carteirinha pode conter:</p>
+        <ul>
+          <li>Nome completo, SUS e data de nascimento</li>
+          <li>Tipo sanguíneo</li>
+          <li>Alergias e condições médicas</li>
+          <li>Medicamentos de uso contínuo</li>
+          <li>Contatos de emergência</li>
+        </ul>
+        <p>
+          O sistema permite baixar a carteirinha em PDF ou PNG, além de imprimir
+          facilmente em frente e verso.
+        </p>
+        <p>
+          Esta versão é um <strong>protótipo funcional</strong>, sendo parte de
+          um projeto acadêmico do curso de Análise e Desenvolvimento de
+          Sistemas.
+        </p>
+        <p>
+          O TáSafe não armazena suas informações pessoais. Não existe banco de
+          dados, servidor ou coleta de dados. Toda a geração da carteirinha
+          acontece no seu próprio navegador e os dados desaparecem ao fechar a
+          página.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      Projeto Extensionista – TáSafe<br />
+      Desenvolvido por Gabriel S. Bizaco
+    </footer>
+    <script>
+      (function () {
+        const header = document.querySelector("header");
+        const btn = header?.querySelector(".nav-toggle");
+        const nav = header?.querySelector("#site-menu");
+
+        if (!header || !btn || !nav) return;
+
+        function openMenu() {
+          header.classList.add("is-open");
+          btn.setAttribute("aria-expanded", "true");
+        }
+        function closeMenu() {
+          header.classList.remove("is-open");
+          btn.setAttribute("aria-expanded", "false");
+        }
+
+        btn.addEventListener("click", () => {
+          header.classList.contains("is-open") ? closeMenu() : openMenu();
+        });
+
+        // Fecha ao clicar fora do header
+        document.addEventListener("click", (e) => {
+          if (!header.classList.contains("is-open")) return;
+          if (!e.target.closest("header")) closeMenu();
+        });
+
+        // Fecha com ESC
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeMenu();
+        });
+
+        // Fecha ao clicar em um link do menu
+        nav.addEventListener("click", (e) => {
+          if (e.target.closest("a")) closeMenu();
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -2261,3 +2261,37 @@ header nav ul {
     font-weight: 600;
   }
 }
+
+/* Evita o zoom do Safari e glitches de line-height */
+.ios input, .ios select, .ios textarea {
+  font-size: 16px;           /* iOS não “zooma” ao focar */
+  line-height: normal;
+}
+
+
+.ios .field.select label,
+.ios .form-field.select label,
+.ios .group-field.select label {
+  position: static;          /* desliga flutuante no iOS */
+  display: block;
+  margin: 0 0 4px;
+  font-size: 13px;
+  background: transparent;
+  padding: 0;
+  z-index: 1;
+}
+
+.ios .field.select select,
+.ios .form-field.select select,
+.ios .group-field.select select {
+  -webkit-appearance: menulist; 
+  appearance: menulist;
+  height: 44px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+
+.ios .field.select select option[disabled][value=""] {
+  color: #666; /* aparência de placeholder */
+}

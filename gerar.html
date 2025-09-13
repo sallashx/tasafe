@@ -659,5 +659,12 @@
         });
       })();
     </script>
+    <script>
+    (function () {
+      const isiOS = /iP(hone|od|ad)/.test(navigator.platform)
+        || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+      if (isiOS) document.documentElement.classList.add('ios');
+    })();
+    </script>
   </head>
 </html>
